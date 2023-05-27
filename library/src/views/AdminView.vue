@@ -1,5 +1,5 @@
 <template>
-    <div>普通用户界面</div>
+    <div>管理员用户界面</div>
 </template>
 
 <script></script>

@@ -11,7 +11,9 @@
                     <el-menu :default-openeds="['1', '3']">
                         <el-submenu index="1">
                             <template slot="title"><i class="el-icon-menu"></i>用户操作</template>
-                            <el-menu-item index="1-1">所有图书</el-menu-item>
+                            <el-menu-item index="1-1">
+                                <div style="text-decoration: none;">所有图书</div>
+                            </el-menu-item>
                             <el-menu-item index="1-2">已借图书</el-menu-item>
                         </el-submenu>
                         <el-submenu index="2">
@@ -30,7 +32,15 @@
                         <el-table-column prop="state" label="是否可借" width="200">
                         </el-table-column>
                         <el-table-column label="操作" width="200">
-                            <button id="btn" @click="borrow">借阅</button>
+                            <!-- <button id="btn" @click="borrow">借阅</button> -->
+                            <template slot-scope="scope">
+                                <el-button type="text" @click="borrow(scope.row)">借阅</el-button>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作" width="200">
+                            <template slot-scope="scope">
+                                <el-button type="text" @click="returnBook(scope.row)">归还</el-button>
+                            </template>
                         </el-table-column>
                     </el-table>
                     <el-pagination background layout="prev, pager, next" :total="50" style="position: absolute; left: 36%;">
@@ -44,6 +54,12 @@
 <script>
 import axios from 'axios';
 var id = window.sessionStorage.getItem('id');
+
+function getInfo(readerId, bookId, bookName) {
+    this.readerId = readerId;
+    this.bookId = bookId;
+    this.bookName = bookName;
+}
 export default {
     data() {
         return {
@@ -52,9 +68,26 @@ export default {
         }
     },
     methods: {
-        borrow: function () {
-            alert("借阅！");
-        }
+        borrow: function (val) {
+            var info = new getInfo(id, 0, val.bookName);
+            axios.post("http://localhost:8080/reader/borrow", info)
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+        returnBook: function (val) {
+            var info = new getInfo(id, 0, val.bookName);
+            axios.post("http://localhost:8080/reader/return", info)
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
     },
     mounted() {
         axios.get("http://localhost:8080/reader")
@@ -103,5 +136,9 @@ export default {
 #table1 {
     position: relative;
     left: 2%;
+}
+
+#btnMenu {
+    text-decoration: none;
 }
 </style>
