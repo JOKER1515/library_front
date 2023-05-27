@@ -31,12 +31,12 @@
                         </el-table-column>
                         <el-table-column prop="author" label="作者" width="200">
                         </el-table-column>
-                        <el-table-column prop="state" label="是否可借" width="200">
+                        <el-table-column prop="borrowTime" label="借阅时间" width="200">
                         </el-table-column>
                         <el-table-column label="操作" width="200">
                             <!-- <button id="btn" @click="borrow">借阅</button> -->
                             <template slot-scope="scope">
-                                <el-button type="primary" @click="borrow(scope.row)">借阅</el-button>
+                                <el-button type="primary" @click="returnBook(scope.row)">归还</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -57,11 +57,26 @@ function getInfo(readerId, bookId, bookName) {
     this.bookId = bookId;
     this.bookName = bookName;
 }
+
+/* public class Reader {
+    private String id;
+    private String password;
+    private String readerName;
+    private String gender;
+} */
+//构造函数获得reader对象
+function getReader(id, password, readerName, gender) {
+    this.id = id;
+    this.password = password;
+    this.readerName = readerName;
+    this.gender = gender;
+}
+
 export default {
     data() {
         return {
             tableData: [],
-            id
+            id,
         }
     },
     methods: {
@@ -152,7 +167,8 @@ export default {
 
     //钩子函数
     mounted() {
-        axios.get("http://localhost:8080/reader/allBooks")
+        var reader = new getReader(id, "", "", "");
+        axios.put("http://localhost:8080/reader/borrowedBooks", reader)
             .then(res => {
                 this.tableData = res.data.data;
             })
