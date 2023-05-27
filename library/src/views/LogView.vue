@@ -5,13 +5,13 @@
             <el-form ref="form" :model="form" label-width="80px">
                 <div id="log">登录</div>
                 <div id="form-top"></div>
-                <el-form-item label="用户名">
-                    <el-input v-model="form.id" id="input"></el-input>
+                <el-form-item label="用户名" style="position: relative; left: 40px;">
+                    <el-input v-model="form.id" id="input" style=""></el-input>
                 </el-form-item>
-                <el-form-item label="密码" id="input2">
+                <el-form-item label="密码" id="input2" style="position: relative; left: 40px;">
                     <el-input v-model="form.password"></el-input>
                 </el-form-item>
-                <el-form-item label="管理员">
+                <el-form-item label="管理员" style="position: relative; left: 40px;">
                     <el-radio-group v-model="admin">
                         <el-radio label="是"></el-radio>
                         <el-radio label="否"></el-radio>

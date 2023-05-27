@@ -5,16 +5,16 @@
             <el-form ref="form" :model="form" label-width="80px">
                 <div id="log">注册</div>
                 <div id="form-top1"></div>
-                <el-form-item label="用户名">
+                <el-form-item label="用户名" style="position: relative; left: 40px;">
                     <el-input v-model="form.id" id="input"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" id="input2">
+                <el-form-item label="密码" id="input2" style="position: relative; left: 40px;">
                     <el-input v-model="form.password"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名" id="input2">
+                <el-form-item label="姓名" id="input2" style="position: relative; left: 40px;">
                     <el-input v-model="form.readerName"></el-input>
                 </el-form-item>
-                <el-form-item label="性别">
+                <el-form-item label="性别" style="position: relative; left: 40px;">
                     <el-radio-group v-model="form.gender">
                         <el-radio label="男"></el-radio>
                         <el-radio label="女"></el-radio>
@@ -48,14 +48,34 @@ export default {
     },
     methods: {
         onSubmit: function () {
-            axios.post("http://localhost:8080/register/common", this.form)
-                .then(res => {
-                    if (res.data.msg == "success") {
-                        alert("注册成功！");
-                    } else {
-                        alert("注册失败，已存在该用户！");
-                    }
-                })
+            this.$confirm('是否注册一个新账户?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                axios.post("http://localhost:8080/register/common", this.form)
+                    .then(res => {
+                        if (res.data.msg == "success") {
+                            this.$message({
+                                type: 'success',
+                                message: '注册成功!'
+                            });
+                            this.$router.push({
+                                name: 'log',
+                            })
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: '注册失败，已存在该用户！'
+                            });
+                        }
+                    })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     }
 
