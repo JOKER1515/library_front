@@ -33,7 +33,7 @@
                         </el-table-column>
                         <el-table-column prop="author" label="作者" width="200">
                         </el-table-column>
-                        <el-table-column prop="state" label="是否可借" width="200">
+                        <el-table-column prop="stateMessage" label="是否可借" width="200">
                         </el-table-column>
                         <el-table-column label="操作" width="200">
                             <!-- <button id="btn" @click="borrow">借阅</button> -->
