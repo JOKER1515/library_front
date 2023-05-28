@@ -80,43 +80,6 @@ export default {
         }
     },
     methods: {
-
-        //借阅方法
-        borrow: function (val) {
-            //弹框设置
-            this.$confirm('是否借阅该书', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                //向后端发起请求
-                var info = new getInfo(id, 0, val.bookName);
-                axios.post("http://localhost:8080/reader/borrow", info)
-                    .then(res => {
-                        //console.log(res)
-                        if (res.data.msg == "success") {
-                            this.$message({
-                                type: 'success',
-                                message: '借阅成功!'
-                            });
-                        }
-
-                        //计时器，一秒后刷新页面使得数据能够得到重新载入
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000)
-                    })
-                    .catch(err => {
-                        console.error(err);
-                    })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消借阅'
-                });
-            });
-        },
-
         //归还方法
         returnBook: function (val) {
             this.$confirm('是否归还该书?', '提示', {

@@ -21,7 +21,9 @@
                         <el-submenu index="2">
                             <template slot="title"><i class="e-l-icon-setting"></i>账户设置</template>
                             <el-menu-item index="2-1">修改密码</el-menu-item>
-                            <el-menu-item index="2-2">登出</el-menu-item>
+                            <el-menu-item index="2-2">
+                                <el-button type="text" @click="logOut">登出</el-button>
+                            </el-menu-item>
                         </el-submenu>
                     </el-menu>
                 </el-aside>
@@ -84,12 +86,16 @@ export default {
                                 type: 'success',
                                 message: '借阅成功!'
                             });
+                            //计时器，一秒后刷新页面使得数据能够得到重新载入
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 1000)
+                        } else {
+                            this.$message({
+                                type: 'error',
+                                message: '请勿重复借阅相同书本!'
+                            });
                         }
-
-                        //计时器，一秒后刷新页面使得数据能够得到重新载入
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000)
                     })
                     .catch(err => {
                         console.error(err);
@@ -98,39 +104,6 @@ export default {
                 this.$message({
                     type: 'info',
                     message: '已取消借阅'
-                });
-            });
-        },
-
-        //归还方法
-        returnBook: function (val) {
-            this.$confirm('是否归还该书?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                var info = new getInfo(id, 0, val.bookName);
-                axios.post("http://localhost:8080/reader/return", info)
-                    .then(res => {
-                        //console.log(res)
-                        if (res.data.msg == "success") {
-                            this.$message({
-                                type: 'success',
-                                message: '归还成功!'
-                            });
-                        }
-                        //计时器，一秒后刷新页面使得数据能够得到重新载入
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000)
-                    })
-                    .catch(err => {
-                        console.error(err);
-                    })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消归还'
                 });
             });
         },
@@ -147,7 +120,27 @@ export default {
             this.$router.push({
                 name: 'borrowed'
             })
-        }
+        },
+
+        //登出触发函数
+        logOut: function () {
+            this.$confirm('是否要登出该账户', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.$router.push({
+                    name: 'log',
+                })
+                window.location.reload();
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消登出'
+                });
+            });
+        },
+
     },
 
     //钩子函数
