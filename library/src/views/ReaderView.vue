@@ -132,7 +132,6 @@ export default {
                 this.$router.push({
                     name: 'log',
                 })
-                window.location.reload();
             }).catch(() => {
                 this.$message({
                     type: 'info',

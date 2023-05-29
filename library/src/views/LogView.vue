@@ -9,7 +9,7 @@
                     <el-input v-model="form.id" id="input" style=""></el-input>
                 </el-form-item>
                 <el-form-item label="密码" id="input2" style="position: relative; left: 40px;">
-                    <el-input v-model="form.password"></el-input>
+                    <el-input type="password" v-model="form.password"></el-input>
                 </el-form-item>
                 <el-form-item label="管理员" style="position: relative; left: 40px;">
                     <el-radio-group v-model="admin">
