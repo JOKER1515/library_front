@@ -1,12 +1,16 @@
 <template>
     <div id="adminBack">
         <el-container style="height: 745px; border: 1px solid #eee">
+
+            <!-- 页面头部 -->
             <el-header style="text-align: left">
                 <span style="font-size: 25px;">图书管理系统</span>
                 <div style="display: inline-block; position: relative; left: 1150px; font-size: 20px;">欢迎, {{ id }}
                 </div>
             </el-header>
             <el-container>
+
+                <!-- 侧边栏 -->
                 <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
                     <el-menu :default-openeds="['1', '3']">
                         <el-submenu index="1">
@@ -27,22 +31,31 @@
                         </el-submenu>
                     </el-menu>
                 </el-aside>
+
+                <!-- 页面body -->
                 <el-main>
-                    <el-table :data="tableData" style="width: 1000px" id="table1">
-                        <el-table-column prop="bookName" label="书名" width="200">
+                    <span style="font-size: 18px; color: #514a4a; position: relative; left: 50px;">查找图书</span>
+                    <el-input v-model="input" placeholder="请输入书名或作者名字"
+                        style="position: relative; width: 245px; left: 70px;"></el-input>
+                    <el-button type="primary" round style="position: relative; left: 80px;" @click="search">查询</el-button>
+                    <el-table :data="tableData" style="width: 1200px; position: relative; top: 15px; left: 15px;">
+                        <el-table-column prop="bookName" label="书名" width="300px">
                         </el-table-column>
-                        <el-table-column prop="author" label="作者" width="200">
+                        <el-table-column prop="author" label="作者" width="300px">
                         </el-table-column>
-                        <el-table-column prop="stateMessage" label="是否可借" width="200">
+                        <el-table-column prop="stateMessage" label="是否可借" width="300px">
                         </el-table-column>
-                        <el-table-column label="操作" width="200">
+                        <el-table-column label="操作" width="300px">
                             <!-- <button id="btn" @click="borrow">借阅</button> -->
                             <template slot-scope="scope">
                                 <el-button type="primary" @click="borrow(scope.row)">借阅</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
-                    <el-pagination background layout="prev, pager, next" :total="50" style="position: absolute; left: 36%;">
+
+                    <!-- 分页 -->
+                    <el-pagination background layout="prev, pager, next" :total="50"
+                        style="position: relative;top: 25px; left: 400px; width: 200px;">
                     </el-pagination>
                 </el-main>
             </el-container>
@@ -59,11 +72,34 @@ function getInfo(readerId, bookId, bookName) {
     this.bookId = bookId;
     this.bookName = bookName;
 }
+
+//获取书本对象
+/* public class Book {
+    private Integer id;
+    private String bookName;
+    private String author;
+    private Integer state;
+    private String stateMessage;
+    private LocalDate borrowTime;
+    private LocalDate lastReturnTime;
+} */
+
+function getBook(id, bookName, author, state, stateMessage, borrowTime, lastReturnTime) {
+    this.id = id;
+    this.bookName = bookName;
+    this.author = author;
+    this.state = state;
+    this.stateMessage = stateMessage;
+    this.borrowTime = borrowTime;
+    this.lastReturnTime = lastReturnTime;
+}
+
 export default {
     data() {
         return {
             tableData: [],
-            id
+            id,
+            input: '',
         }
     },
     methods: {
@@ -110,13 +146,15 @@ export default {
 
         //查看所有可借图书
         allBooks: function () {
+            window.location.reload();
             this.$router.push({
                 name: 'reader'
-            })
+            });
         },
 
         //查看该用户已经借走的图书
         booksBorrowed: function () {
+            window.location.reload();
             this.$router.push({
                 name: 'borrowed'
             })
@@ -140,6 +178,16 @@ export default {
             });
         },
 
+        //查询方法
+        search: function () {
+            axios.put("http://localhost:8080/reader/search", new getBook(0, this.input, this.input, 0, "", "", ""))
+                .then(res => {
+                    this.tableData = res.data.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
     },
 
     //钩子函数
