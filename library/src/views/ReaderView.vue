@@ -154,7 +154,7 @@ export default {
 
         //查看该用户已经借走的图书
         booksBorrowed: function () {
-            window.location.reload();
+            // window.location.reload();
             this.$router.push({
                 name: 'borrowed'
             })
