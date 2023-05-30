@@ -180,7 +180,7 @@ export default {
 
         //查询方法
         search: function () {
-            axios.put("http://localhost:8080/reader/search", new getBook(0, this.input, this.input, 0, "", "", ""))
+            axios.put("http://localhost:8080/reader/searchByInfo", new getBook(0, this.input, this.input, 0, "", "", ""))
                 .then(res => {
                     this.tableData = res.data.data;
                 })
