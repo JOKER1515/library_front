@@ -38,7 +38,8 @@
                     <el-input v-model="input" placeholder="请输入书名或作者名字"
                         style="position: relative; width: 245px; left: 70px;"></el-input>
                     <el-button type="primary" round style="position: relative; left: 80px;" @click="search">查询</el-button>
-                    <el-table :data="tableData" style="width: 1200px; position: relative; top: 15px; left: 15px;">
+                    <el-table :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+                        style="width: 1200px; position: relative; top: 15px; left: 15px;">
                         <el-table-column prop="bookName" label="书名" width="300px">
                         </el-table-column>
                         <el-table-column prop="author" label="作者" width="300px">
@@ -54,8 +55,12 @@
                     </el-table>
 
                     <!-- 分页 -->
-                    <el-pagination background layout="prev, pager, next" :total="50"
+                    <!-- <el-pagination background layout="prev, pager, next" :total="50"
                         style="position: relative;top: 25px; left: 400px; width: 200px;">
+                    </el-pagination> -->
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                        :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next, jumper"
+                        :total=36 style="position: relative; top: 25px; left: 200px; width: 400px;">
                     </el-pagination>
                 </el-main>
             </el-container>
@@ -100,6 +105,9 @@ export default {
             tableData: [],
             id,
             input: '',
+            currentPage: 1,
+            pageSize: 6,
+            length,
         }
     },
     methods: {
@@ -188,6 +196,14 @@ export default {
                     console.error(err);
                 })
         },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
+            this.currentPage = val;
+
+        },
     },
 
     //钩子函数
@@ -195,6 +211,8 @@ export default {
         axios.get("http://localhost:8080/reader/allBooks")
             .then(res => {
                 this.tableData = res.data.data;
+                var length = this.tableData.length;
+                console.log(length);
             })
             .catch(err => {
                 console.error(err);
