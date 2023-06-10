@@ -63,6 +63,7 @@ export default {
                 axios.post("http://localhost:8080/login/admin", this.form)
                     .then(res => {
                         if (res.data.msg == "success") {
+                            window.sessionStorage.setItem('id', this.form.id);
                             this.$router.push({
                                 name: 'admin'
                             })
